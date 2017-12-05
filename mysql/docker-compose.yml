@@ -1,0 +1,17 @@
+data:
+  build: docker/data/.
+mysql:
+  image: mysql
+  container_name: gamification-mysqldb
+  restart: always
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: 1234
+    MYSQL_DATABASE: gamification
+    MYSQL_USER: golf_user
+    MYSQL_PASSWORD: 123789
+  volumes:
+    - ./docker/data:/docker-entrypoint-initdb.d
+  volumes_from:
+    - data

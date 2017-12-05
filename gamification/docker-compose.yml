@@ -1,0 +1,40 @@
+version: '2'
+services:
+  mysqldb:
+    image: mysql
+    container_name: gamification-mysqldb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: gamification
+      MYSQL_USER: golf_user
+      MYSQL_PASSWORD: 123789
+    volumes:
+      - ./docker/data:/docker-entrypoint-initdb.d
+  server:
+    image: thuongtran/gamification-server:v.2.0.0
+    container_name: con-gamification-server
+    ports: 
+      - "8089:8089"
+  client:
+    image: thuongtran/gamification-client:v.2.0.0
+    container_name: con-gamification-client
+    ports:
+      - "8082:8082"
+    environment:
+      PORT: 8082
+      MONGODB_URI: mongodb://10.0.0.17:12345/gamification-fwd
+      SESSION_SECRET: LUpw33sH3vLHX9MReGRS7YxRJeUY2e
+      SENDGRID_USERNAME: app62845008@heroku.com
+      SENDGRID_PASSWORD: agmy2sig5149
+      MYSQL_URL: gamification-mysqldb
+      MYSQL_USERNAME: golf_user
+      MYSQL_PASSWORD: 123789
+      MYSQL_DATABASE: gamification
+      MYSQL_PORT: 3306
+      SERVER_API: http://con-gamification-server:8089
+      SERVER_API_POPUP: http://con-gamification-server:8089
+
+
